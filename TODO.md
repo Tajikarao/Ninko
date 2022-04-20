@@ -11,8 +11,8 @@
 - [ ] Refacto & commentary
 
 ## BDD
-- [ ] Define how the data will be stored
-- [ ] Write base code
+- [x] Define how the data will be stored
+- [x] Write base code
 - [ ] Refacto & commentary
 
 ## Data visualization

@@ -1,6 +1,4 @@
-from utils.webresolver import Webresolver 
+from services.crawler import Crawler
 
 if __name__ == "__main__":
-    webresolver = Webresolver()
-    geoip = webresolver.get_domaine_geoip("https://www.nandesuka.moe/")
-    print(geoip)
+    Crawler().start()

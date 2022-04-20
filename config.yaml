@@ -1,0 +1,2 @@
+database: {TLD: "data/TLD.yaml", TLD_infos: "data/TLD_infos.yaml"}
+threads: 5
