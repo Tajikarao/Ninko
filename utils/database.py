@@ -14,9 +14,21 @@ class Database(metaclass=Singleton):
         with open(self.config.data["database"]["TLD"]) as TLD:
             return self.yaml_to_json(TLD)
 
+    def is_present_in_tld(self, domaine):
+        if domaine in self.tld:
+            return True
+
+        return False
+
     def init_tld_infos(self):
         with open(self.config.data["database"]["TLD_infos"]) as TLD_infos:
             return self.yaml_to_json(TLD_infos)
+
+    def is_present_in_tld_infos(self, domaine, ip):
+        if ip in self.tld_infos[domaine]:
+            return True
+
+        return False
 
     def yaml_to_json(self, yamlF):
         return yaml.safe_load(yamlF)
