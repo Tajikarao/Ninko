@@ -1,4 +1,5 @@
 import re
+import socket
 from urllib.parse import urlparse
 
 import httpx
@@ -15,24 +16,28 @@ class Crawler:
 
     def process_page(self, url):
         content = self.session.get(url).text
-        urls = re.findall(r"http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+", content)
+        urls = re.findall(
+            r"http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+",
+            content,
+        )
         self.process_domaines(urls)
 
     def process_domaines(self, urls):
         for url in urls:
             domaine = urlparse(url).netloc
             if domaine:
-                if not self.database.is_present_in_tld(domaine):
-                    pass  # TODO: add in tld yaml
+                if self.database.is_not_present_in_tld(domaine):
+                    self.database.update_init_tld(domaine)
 
-                ip_list = []  # TODO: get list of all ips find for this domaine
+                ip_list = [
+                    socket.gethostbyname(domaine)
+                ]  # TODO: get list of all ips find for this domaine
 
                 for ip in ip_list:
-                    if not self.database.is_present_in_tld_infos(domaine, ip):
+                    if not self.database.is_ip_present_in_tld(domaine, ip):
                         pass  # TODO: add in tld yaml
 
     def start(self):
         print(self.database.config.data)
         print(self.database.tld)
-        print(self.database.tld_infos)
         self.process_page("https://nyaa.si/")

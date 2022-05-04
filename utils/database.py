@@ -1,3 +1,5 @@
+import json
+
 import yaml
 
 from utils.config import Config
@@ -8,25 +10,31 @@ class Database(metaclass=Singleton):
     def __init__(self) -> None:
         self.config = Config()
         self.tld = self.init_tld()
-        self.tld_infos = self.init_tld_infos()
 
     def init_tld(self):
         with open(self.config.data["database"]["TLD"]) as TLD:
             return self.yaml_to_json(TLD)
 
-    def is_present_in_tld(self, domaine):
-        if domaine in self.tld:
-            return True
+    def update_init_tld(self, domaine):
+        self.tld = self.init_tld()
+        self.tld["domaines"][domaine] = []
 
-        return False
+        yaml.dump(
+            self.tld,
+            open(self.config.data["database"]["TLD"], "w+"),
+            default_flow_style=False,
+        )
 
-    def init_tld_infos(self):
-        with open(self.config.data["database"]["TLD_infos"]) as TLD_infos:
-            return self.yaml_to_json(TLD_infos)
+    def is_not_present_in_tld(self, domaine):
+        if domaine in self.tld["domaines"]:
+            return False
 
-    def is_present_in_tld_infos(self, domaine, ip):
-        if ip in self.tld_infos[domaine]:
-            return True
+        return True
+
+    def is_ip_present_in_tld(self, domaine, ip):
+        if domaine in self.tld["domaines"]:
+            if ip in domaine:
+                return True
 
         return False
 

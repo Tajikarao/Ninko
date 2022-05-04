@@ -1,2 +1,8 @@
-google.com
-discord.com
+domaines:
+  cdnjs.cloudflare.com: []
+  getbootstrap.com: []
+  localhost:
+  - 127.0.0.1
+  nyaa.si: []
+  oss.maxcdn.com: []
+  twitter.com: []
