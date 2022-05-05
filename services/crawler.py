@@ -27,7 +27,7 @@ class Crawler:
             domaine = urlparse(url).netloc
             if domaine:
                 if self.database.is_not_present_in_tld(domaine):
-                    self.database.update_init_tld(domaine)
+                    self.database.update_tld(domaine)
 
                 ip_list = [
                     socket.gethostbyname(domaine)
@@ -35,7 +35,7 @@ class Crawler:
 
                 for ip in ip_list:
                     if not self.database.is_ip_present_in_tld(domaine, ip):
-                        pass  # TODO: add in tld yaml
+                        self.database.update_tld_ip(domaine, ip)
 
     def start(self):
         print(self.database.config.data)

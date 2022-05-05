@@ -7,7 +7,7 @@
 
 ## Crawler
 - [ ] Find a way to quickly create a way to switch from domain to domain
-- [ ] Write base code
+- [x] Write base code
 - [ ] Refacto & commentary
 
 ## BDD
