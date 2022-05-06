@@ -37,17 +37,10 @@ class Database(metaclass=Singleton):
         )
 
     def is_not_present_in_tld(self, domaine):
-        if domaine in self.tld["domaines"]:
-            return False
-
-        return True
+        return domaine not in self.tld["domaines"]
 
     def is_ip_present_in_tld(self, domaine, ip):
-        if domaine in self.tld["domaines"]:
-            if ip in self.tld["domaines"][domaine]:
-                return True
-
-        return False
+        return domaine in self.tld["domaines"] and ip in self.tld["domaines"][domaine]
 
     def yaml_to_json(self, yamlF):
         return yaml.safe_load(yamlF)

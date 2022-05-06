@@ -24,8 +24,7 @@ class Crawler:
 
     def process_domaines(self, urls):
         for url in urls:
-            domaine = urlparse(url).netloc
-            if domaine:
+            if domaine := urlparse(url).netloc:
                 if self.database.is_not_present_in_tld(domaine):
                     self.database.update_tld(domaine)
 
