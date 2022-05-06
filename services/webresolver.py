@@ -34,21 +34,17 @@ class Webresolver:
 
         for solved in webresolver:
             try:
-                solved_title = re.search("<b>(.*):</b>", solved).group(1)
-                if solved_title:
-                    solved_content = solved.split("</b>")[1]
-                    if solved_content:
+                if solved_title := re.search("<b>(.*):</b>", solved)[1]:
+                    if solved_content := solved.split("</b>")[1]:
                         specials = ["Country", "Continent"]
                         if solved_title in specials:
-                            solved_content = re.search("> (.*)", solved_content).group(
-                                1
-                            )
+                            solved_content = re.search("> (.*)", solved_content)[1]
 
                         solved_title = " ".join(filter(None, solved_title.split(" ")))
                         solved_content = " ".join(
                             filter(None, solved_content.split(" "))
                         )
-                        solver_parse.update({solved_title: solved_content})
+                        solver_parse[solved_title] = solved_content
             except:
                 pass
 
