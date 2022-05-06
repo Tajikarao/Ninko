@@ -1,2 +1,3 @@
 database: {TLD: "data/TLD.yaml", TLD_infos: "data/TLD_infos.yaml"}
+webresolver_key: "UD5EN-MR2I9-LHYL1-BGVT1"
 threads: 5

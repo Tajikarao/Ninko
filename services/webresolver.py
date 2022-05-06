@@ -1,11 +1,15 @@
+import contextlib
 import re
 
 import requests
+
+from utils.config import Config
 
 
 class Webresolver:
     def __init__(self) -> None:
         self.session = requests.Session()
+        self.config = Config()
         self.base_url: str = "https://webresolver.nl"
 
         self.endpoints: dict = {"geoip": "ajax/tools/geoip"}
@@ -33,7 +37,7 @@ class Webresolver:
         ).text.split("<br />")
 
         for solved in webresolver:
-            try:
+            with contextlib.suppress(Exception):
                 if solved_title := re.search("<b>(.*):</b>", solved)[1]:
                     if solved_content := solved.split("</b>")[1]:
                         specials = ["Country", "Continent"]
@@ -45,7 +49,8 @@ class Webresolver:
                             filter(None, solved_content.split(" "))
                         )
                         solver_parse[solved_title] = solved_content
-            except:
-                pass
-
         return solver_parse
+
+
+    def get_old_domaine_ip_list(self, domaine: str):
+        return self.session.get(f"https://webresolver.nl/api.php?key={self.config.data['webresolver_key']}&json&action=domaininfo&string={domaine}").json()
