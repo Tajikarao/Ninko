@@ -13,13 +13,8 @@ class Webresolver:
         self.base_url: str = "https://webresolver.nl"
 
     def get_old_domaine_ip_list(self, domaine: str):
-        ips = []
-
         ip_history = self.session.get(
             f"{self.base_url}/api.php?key={self.config.data['webresolver_key']}&json&action=domaininfo&string={domaine}"
         ).json()["ip_history"]
 
-        for selector in ip_history:
-            ips.append(selector["ip_address"])
-
-        return ips
+        return [selector["ip_address"] for selector in ip_history]
