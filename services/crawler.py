@@ -13,6 +13,10 @@ class Crawler:
         self.webresolver = Webresolver()
         self.database = Database()
         self.session = httpx.Client(http2=True, headers={"user-agent": "Ninka"})
+        self.queue = []
+
+    def get_queue(self):
+        return self.queue
 
     def process_page(self, url):
         content = self.session.get(url).text
@@ -25,18 +29,16 @@ class Crawler:
     def process_domaines(self, urls):
         for url in urls:
             if domaine := urlparse(url).netloc:
+                ip_list = []
                 if self.database.is_not_present_in_tld(domaine):
                     self.database.update_tld(domaine)
+                    ip_list.extend(self.webresolver.get_old_domaine_ip_list(domaine))
 
-                ip_list = [
-                    socket.gethostbyname(domaine)
-                ]  # TODO: get list of all ips find for this domaine
+                ip_list.append(socket.gethostbyname(domaine))
 
                 for ip in ip_list:
                     if not self.database.is_ip_present_in_tld(domaine, ip):
                         self.database.update_tld_ip(domaine, ip)
 
     def start(self):
-        print(self.database.config.data)
-        print(self.database.tld)
         self.process_page("https://nyaa.si/")
